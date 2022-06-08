@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-service
+  labels:
+    app: audit-service
+    {{- with .Values.deploymentLabels }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+{{- with .Values.deploymentAnnotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: audit-service
+  template:
+    metadata:
+      labels:
+        app: audit-service
+      {{- with .Values.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      {{- if gt (len .Values.serviceAccount.name) 0 }}
+      serviceAccountName: "{{ .Values.serviceAccount.name }}"
+      {{- end }}
+
+      containers:
+        - name: {{ .Values.applicationName }}
+          image: {{ .Values.image }}
+          imagePullPolicy: Always
+
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+{{ toYaml .Values.livenessProbe | indent 12 }}
+          {{- end }}
+
+          {{- if .Values.securityContext }}
+          securityContext:
+{{ toYaml .Values.securityContext | indent 12 }}
+          {{- end}}
+          resources:
+{{ toYaml .Values.containerResources | indent 12 }}

@@ -1,0 +1,20 @@
+deploymentAnnotations:
+  keel.sh/pollSchedule: "@every 10m"
+  keel.sh/policy: patch
+  keel.sh/trigger: poll
+
+podAnnotations:
+   prometheus.io/scrape: "true"
+   prometheus.io/path: /metrics
+   prometheus.io/scheme: "http"
+   prometheus.io/port: "18989"
+
+applicationName: audit-service
+
+livenessProbe:
+  exec:
+    command: ["/bin/grpc_health_probe", "-addr=:18991"]
+  initialDelaySeconds: 15
+
+securityContext:
+  readOnlyRootFilesystem: true
