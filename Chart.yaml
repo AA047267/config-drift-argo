@@ -1,4 +1,0 @@
-apiVersion: v1
-name: config-drifts-helm
-description: a chart to test config drift
-version: 1.0.0
