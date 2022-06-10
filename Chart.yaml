@@ -1,7 +1,0 @@
-apiVersion: v1
-name: nginx-argo-app
-description: A Helm chart to package Audit Service
-version: 1.0.0
-maintainers:
-  - name: Skyflow Infra
-    email: test@skyflow.com
